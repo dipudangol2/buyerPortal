@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { JWTPayload } from "../types";
 
 export const verifyToken = (request: Request, response: Response, next: NextFunction) => {
     try {
@@ -20,8 +21,10 @@ export const verifyToken = (request: Request, response: Response, next: NextFunc
                 return;
             }
 
-            if (payload && typeof payload === "object" && "userId" in payload) {
-                request.userId = payload.userId;
+            const decoded = payload as JWTPayload;
+
+            if (decoded && typeof decoded === "object" && "userId" in decoded) {
+                request.userId = decoded.userId;
                 return next();
             }
 

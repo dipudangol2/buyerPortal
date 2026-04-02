@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { hashPassword, createToken, comparePasswords } from "../utils/utils";
 import pool from "../config/db";
+import { User } from "../types";
 
 export const signup = async (request: Request, response: Response, next: NextFunction) => {
     const { name, email, password } = request.body;
@@ -21,7 +22,7 @@ export const signup = async (request: Request, response: Response, next: NextFun
             [name, email, hashedPassword]
         );
 
-        const newUser = result.rows[0];
+        const newUser: User = result.rows[0];
 
         response.status(201).json({
             message: 'User registered successfully',
@@ -38,14 +39,14 @@ export const login = async (request: Request, response: Response, next: NextFunc
 
     try {
         const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-        const user = result.rows[0];
+        const user: User = result.rows[0];
 
         if (!user) {
             response.status(401).json({ error: 'Invalid email or password' });
             return;
         }
 
-        const isMatch = await comparePasswords(password, user.password);
+        const isMatch = await comparePasswords(password, user.password as string);
         if (!isMatch) {
             response.status(401).json({ error: 'Invalid email or password' });
             return;
@@ -73,7 +74,7 @@ export const getCurrentUser = async (request: Request, response: Response, next:
     try {
         const userId = request.userId;
         const result = await pool.query('SELECT id, name, email, role FROM users WHERE id = $1', [userId]);
-        const user = result.rows[0];
+        const user: User = result.rows[0];
 
         if (!user) {
             response.status(404).json({ error: 'User not found' });

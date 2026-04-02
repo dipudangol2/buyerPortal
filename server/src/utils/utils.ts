@@ -12,7 +12,7 @@ export const comparePasswords = async (plain: string, hashed: string): Promise<b
     return await bcrypt.compare(plain, hashed);
 };
 
-export const createToken = (email: string, userId: string) => {
+export const createToken = (email: string, userId: string | number) => {
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
         throw new Error("JWT_SECRET is not defined in environment variables");
