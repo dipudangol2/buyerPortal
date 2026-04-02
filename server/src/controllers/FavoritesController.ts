@@ -12,7 +12,7 @@ export const getAllFavorites = async (request: Request, response: Response, next
             WHERE f.user_id = $1
             ORDER BY f.created_at DESC
         `, [userId]);
-        
+
         const properties: Property[] = result.rows.map((row: any) => ({
             ...row,
             isFavourited: true
@@ -26,7 +26,7 @@ export const getAllFavorites = async (request: Request, response: Response, next
 };
 
 export const syncFavorites = async (request: Request, response: Response, next: NextFunction) => {
-    const { added, removed }: SyncFavoritesRequest = request.body; 
+    const { added, removed }: SyncFavoritesRequest = request.body;
     const userId = request.userId;
 
     if (!userId) {

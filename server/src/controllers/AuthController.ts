@@ -9,7 +9,7 @@ export const signup = async (request: Request, response: Response, next: NextFun
     try {
         const userCheck = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
         if (userCheck.rows.length > 0) {
-            response.status(400).json({ error: 'Cannot use the email providec.' });
+            response.status(400).json({ error: 'Cannot use the email provided.' });
             return;
         }
 
