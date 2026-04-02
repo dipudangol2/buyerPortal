@@ -21,15 +21,11 @@ export const Dashboard = () => {
   const { user, logout } = useAuth();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
-  // Stable Set derived from DB state — only changes when `properties` changes
-  // (i.e. once, after the initial fetch). useMemo prevents new object refs on
-  // every render, which would re-trigger the hook's initialization effect.
   const serverIds = useMemo(
     () => new Set(properties.filter(p => p.isFavourited).map(p => p.id)),
     [properties]
   );
 
-  // Pass `!loading` so the hook initializes exactly once, after data is ready.
   const { favoriteIds, toggleFavorite } = useSyncFavorites(
     serverIds,
     !loading
@@ -51,7 +47,6 @@ export const Dashboard = () => {
   }, []);
 
   const handleToggle = (id: number) => {
-    // toggleFavorite only needs the id — the hook owns state, no DB field needed
     toggleFavorite(id);
   };
 
@@ -63,7 +58,7 @@ export const Dashboard = () => {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-white text-slate-900 font-mono text-sm tracking-widest">
-        LOADING_DASHBOARD...
+        LOADING DASHBOARD...
       </div>
     );
   }
