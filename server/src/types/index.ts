@@ -27,7 +27,12 @@ export interface Favourite {
 
 export interface JWTPayload {
   email: string;
-  userId: string;
+  userId: string | number;
   iat?: number;
   exp?: number;
+}
+
+export interface SyncFavoritesRequest {
+  added: number[];
+  removed: number[];
 }
